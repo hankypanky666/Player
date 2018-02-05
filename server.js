@@ -6,6 +6,10 @@ const port = process.argv[2] || 9000;
 
 http.createServer((req, res) => {
     console.log(`${req.method} ${req.url}`);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Request-Method', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+    res.setHeader('Access-Control-Allow-Headers', '*');
 
     // parse URL
     const parsedUrl = url.parse(req.url);

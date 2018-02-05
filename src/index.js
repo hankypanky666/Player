@@ -1,4 +1,4 @@
 import Player from './Player';
 
 const player = new Player();
-player.init();
+player.play();
