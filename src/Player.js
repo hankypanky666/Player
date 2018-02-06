@@ -23,7 +23,9 @@ class Player {
                     this.source.onended = () => {
                         this.source = null;
                     }
-                });
+                },
+                    error => console.log(error)
+                );
         } else {
             this.pauseOrResume();
         }
