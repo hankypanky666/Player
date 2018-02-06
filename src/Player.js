@@ -1,36 +1,43 @@
-import Buffer from './Buffer';
-
-const sounds = [
-    'http://127.0.0.1:9000/public/op43.mp3',
-];
-
 class Player {
-    constructor() {
-        this.context = new (window.AudioContext || window.webkitAudioContext)();
-        this.buffer = new Buffer(this.context, sounds);
-        this.buffer.loadAll();
+    constructor({context, buffer, sounds}) {
+        this.context = context;
+        this.buffer = buffer;
+        this.sounds = sounds;
     }
 
     init() {
         this.gainNode = this.context.createGain();
         this.source = this.context.createBufferSource();
-        this.source.buffer = this.buffer.getSoundByIndex(0);
         this.source.connect(this.gainNode);
         this.gainNode.connect(this.context.destination);
     }
 
     play() {
-        setTimeout(() => {
-            this.init();
-            console.log('start', this.source);
-            this.source.start(this.context.currentTime);
-        }, 2000);
+        console.log(this.source);
+        if (!this.source) {
+            this.buffer.loadSound(this.sounds[0])
+                .then(buffer => {
+                    this.init();
+                    this.source.buffer = buffer;
+                    this.source.start(this.context.currentTime);
+                    this.source.onended = () => {
+                        this.source = null;
+                    }
+                });
+        } else {
+            this.pauseOrResume();
+        }
     }
 
-    stop() {
-        this.gainNode.gain.exponentialRampToValueAtTime(0.001, this.context.currentTime + 0.5);
-        this.source.stop(this.context.currentTime + 0.5);
+    pauseOrResume() {
+        console.log(this.context.state);
+        if (this.context.state === 'running') {
+            this.context.suspend();
+        } else if (this.context.state === 'suspended') {
+            this.context.resume();
+        }
     }
+
 }
 
 export default Player;

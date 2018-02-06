@@ -11,10 +11,10 @@ module.exports = {
         contentBase: './dist'
     },
     plugins: [
-        new CleanWebpackPlugin(['dist']),
-        new HtmlWebpackPlugin({
-            title: 'IT-Challenges Music Player'
-        })
+        // new CleanWebpackPlugin(['dist']),
+        // new HtmlWebpackPlugin({
+        //     title: 'IT-Challenges Music Player'
+        // })
     ],
     output: {
         filename: '[name].bundle.js',
